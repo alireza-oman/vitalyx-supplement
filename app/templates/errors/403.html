@@ -1,0 +1,38 @@
+{% extends "errors/error_base.html" %}
+
+{% block title %}403 — Access Forbidden | VITALYX{% endblock %}
+
+{% block error_label %}ACCESS RESTRICTED{% endblock %}
+
+{% block error_code %}403{% endblock %}
+{% block error_number %}403{% endblock %}
+
+{% block error_title_start %}This area is{% endblock %}
+{% block error_title_end %}restricted.{% endblock %}
+
+{% block error_description %}
+You don't have permission to access this page.
+Please return to the homepage or sign in with an authorized account.
+{% endblock %}
+
+{% block error_secondary_action %}
+    {% if not current_user or not current_user.is_authenticated %}
+        <a
+            href="{{ url_for('auth.login') }}"
+            class="error-button error-button-secondary"
+        >
+            Sign in to account
+        </a>
+    {% else %}
+        <a
+            href="{{ url_for('main.home') }}#shop"
+            class="error-button error-button-secondary"
+        >
+            Explore products
+        </a>
+    {% endif %}
+{% endblock %}
+
+{% block error_note %}
+Some areas are reserved for authorized users.
+{% endblock %}

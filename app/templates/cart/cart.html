@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart | VITALYX{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/cart.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+<main class="cart-page">
+    <div class="cart-container">
+
+        <!-- Page Header -->
+        <header class="cart-header">
+            <div class="cart-header-content">
+                <span class="cart-eyebrow">YOUR SELECTION</span>
+
+                <h1>Shopping Cart</h1>
+
+                <p>
+                    Review the products you've selected before continuing.
+                </p>
+            </div>
+
+            <a
+                class="cart-continue-link"
+                href="{{ url_for('main.home') }}#shop"
+            >
+                Continue shopping
+                <span aria-hidden="true">→</span>
+            </a>
+        </header>
+
+        {% if cart_items %}
+            {% set totals = namespace(amount=0, quantity=0) %}
+
+            {% for item in cart_items if item.product %}
+                {% set totals.amount = totals.amount + (item.product.price * item.quantity) %}
+                {% set totals.quantity = totals.quantity + item.quantity %}
+            {% endfor %}
+
+            <!-- Cart Layout -->
+            <div class="cart-layout">
+
+                <!-- Cart Items -->
+                <section
+                    class="cart-items"
+                    aria-label="Products in your cart"
+                >
+                    {% for item in cart_items if item.product %}
+                        {% set line_total = item.product.price * item.quantity %}
+
+                        <article class="cart-item">
+
+                            <!-- Product Image -->
+                            <a
+                                class="cart-item-image"
+                                href="{{ url_for('main.product_detail', slug=item.product.slug) }}"
+                                aria-label="View {{ item.product.name }}"
+                            >
+                                {% if item.product.image and item.product.image.startswith(('http://', 'https://')) %}
+                                    {% set item_img_url = item.product.image %}
+                                {% elif item.product.image %}
+                                    {% set item_img_url = url_for('static', filename='uploads/products/' ~ item.product.image) %}
+                                {% else %}
+                                    {% set item_img_url = url_for('static', filename='images/products/default-product.png') %}
+                                {% endif %}
+
+                                <img
+                                    src="{{ item_img_url }}"
+                                    alt="{{ item.product.name }}"
+                                    loading="lazy"
+                                    onerror="this.onerror=null; this.src='{{ url_for(
+                                        'static',
+                                        filename='images/products/default-product.png'
+                                    ) }}';"
+                                >
+                            </a>
+
+                            <!-- Product Information -->
+                            <div class="cart-item-info">
+                                {% if item.product.brand %}
+                                    <p class="cart-item-brand">
+                                        {{ item.product.brand }}
+                                    </p>
+                                {% endif %}
+
+                                <h2>
+                                    <a
+                                        href="{{ url_for(
+                                            'main.product_detail',
+                                            slug=item.product.slug
+                                        ) }}"
+                                    >
+                                        {{ item.product.name }}
+                                    </a>
+                                </h2>
+
+                                <p class="cart-item-unit-price">
+                                    ${{ '{:,.2f}'.format(item.product.price) }}
+                                    <span>each</span>
+                                </p>
+
+                                {% if not item.product.is_active or item.product.stock <= 0 %}
+                                    <p style="color: #ef4444; font-size: 0.78rem; font-weight: 700; margin-top: 6px;">
+                                        Currently out of stock
+                                    </p>
+                                {% elif item.quantity > item.product.stock %}
+                                    <p style="color: #f59e0b; font-size: 0.78rem; font-weight: 700; margin-top: 6px;">
+                                        Only {{ item.product.stock }} left in stock
+                                    </p>
+                                {% endif %}
+                            </div>
+
+                            <!-- Quantity Controls -->
+                            <div class="cart-item-quantity">
+                                <span class="cart-detail-label">
+                                    Quantity
+                                </span>
+
+                                <form
+                                    class="cart-quantity-form"
+                                    action="{{ url_for(
+                                        'cart.update_quantity',
+                                        item_id=item.id
+                                    ) }}"
+                                    method="POST"
+                                >
+                                    <input
+                                        type="hidden"
+                                        name="csrf_token"
+                                        value="{{ csrf_token() }}"
+                                    >
+
+                                    <div class="cart-quantity-control">
+                                        <button
+                                            type="button"
+                                            class="cart-quantity-btn"
+                                            data-action="decrease"
+                                            aria-label="Decrease quantity"
+                                            {% if item.product.stock <= 0 %}disabled{% endif %}
+                                        >
+                                            −
+                                        </button>
+
+                                        <input
+                                            type="number"
+                                            class="cart-quantity-input"
+                                            name="quantity"
+                                            value="{{ item.quantity }}"
+                                            min="1"
+                                            max="{{ item.product.stock if item.product.stock > 0 else 1 }}"
+                                            step="1"
+                                            required
+                                            aria-label="Product quantity"
+                                            {% if item.product.stock <= 0 %}disabled{% endif %}
+                                        >
+
+                                        <button
+                                            type="button"
+                                            class="cart-quantity-btn"
+                                            data-action="increase"
+                                            aria-label="Increase quantity"
+                                            {% if item.product.stock <= 0 %}disabled{% endif %}
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        class="cart-quantity-save"
+                                        {% if item.product.stock <= 0 %}disabled{% endif %}
+                                    >
+                                        Update
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Remove Item -->
+                            <form
+                                class="cart-remove-form"
+                                method="POST"
+                                action="{{ url_for(
+                                    'cart.delete_cart',
+                                    item_id=item.id
+                                ) }}"
+                            >
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                    >
+
+                                <button
+                                    type="submit"
+                                    class="cart-remove-btn"
+                                    aria-label="Remove {{ item.product.name }} from cart"
+                                >
+                                    <svg
+                                        class="cart-remove-icon"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            d="M3 6h18M8 6V4h8v2m-11 0 1 14h12l1-14M10 10v6m4-6v6"
+                                            stroke="currentColor"
+                                            stroke-width="1.7"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        />
+                                    </svg>
+
+                                    <span>Remove</span>
+                                </button>
+                            </form>
+
+                            <!-- Item Subtotal -->
+                            <div class="cart-item-subtotal">
+                                <span class="cart-detail-label">
+                                    Subtotal
+                                </span>
+
+                                <strong>
+                                    ${{ '{:,.2f}'.format(line_total) }}
+                                </strong>
+                            </div>
+
+                        </article>
+                    {% endfor %}
+                </section>
+
+                <!-- Order Summary -->
+                <aside
+                    class="cart-summary"
+                    aria-label="Cart summary"
+                >
+                    <h2>Order summary</h2>
+
+                    <div class="cart-summary-row">
+                        <span>Total units</span>
+                        <span>{{ totals.quantity }}</span>
+                    </div>
+
+                    <div class="cart-summary-row cart-summary-total">
+                        <span>Total</span>
+
+                        <strong>
+                            ${{ '{:,.2f}'.format(totals.amount) }}
+                        </strong>
+                    </div>
+
+                    <p class="cart-summary-note">
+                        Shipping and order review details will be confirmed at checkout.
+                    </p>
+
+                    <a
+                        class="cart-primary-button"
+                        href="{{ url_for('checkout.checkout') }}"
+                    >
+                        Proceed to Checkout
+                        <span aria-hidden="true">→</span>
+                    </a>
+                </aside>
+
+            </div>
+
+        {% else %}
+
+            <!-- Empty Cart -->
+            <section class="cart-empty">
+                <div class="cart-empty-icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none">
+                        <path
+                            d="M7 10h5l4.2 21.2a4 4 0 0 0 3.9 3.2h15.5a4 4 0 0 0 3.9-3.1L43 17H14"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                        <circle cx="20" cy="40" r="2.5" fill="currentColor"/>
+                        <circle cx="35" cy="40" r="2.5" fill="currentColor"/>
+                    </svg>
+                </div>
+
+                <h2>Your cart is empty</h2>
+
+                <p>
+                    You haven't added any products yet. Explore the
+                    collection and find what works for you.
+                </p>
+
+                <a
+                    class="cart-primary-button"
+                    href="{{ url_for('main.home') }}#shop"
+                >
+                    Explore products
+                </a>
+            </section>
+
+        {% endif %}
+
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050505">
+
+    <title>{% block title %}VITALYX — Error{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/errors.css') }}"
+    >
+</head>
+
+<body class="error-page">
+
+    <div class="error-card">
+
+        <!-- Background effects -->
+        <div class="error-grid" aria-hidden="true"></div>
+        <div class="error-glow" aria-hidden="true"></div>
+
+        <!-- Header -->
+        <header class="error-header">
+
+            <a
+                href="{{ url_for('main.home') }}"
+                class="error-logo"
+                aria-label="VITALYX homepage"
+            >
+                <svg
+                    viewBox="0 0 32 32"
+                    fill="none"
+                    aria-hidden="true"
+                >
+                    <path
+                        d="M4 6L12 26L20 6H28L16 29L4 6Z"
+                        fill="currentColor"
+                    />
+                    <path
+                        d="M17 6H25L21 14"
+                        stroke="#A78BFA"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                    />
+                </svg>
+
+                <span>
+                    VITALYX<span class="error-logo-dot">.</span>
+                </span>
+            </a>
+
+            <a
+                href="{{ url_for('main.home') }}#shop"
+                class="error-header-button"
+            >
+                Shop Supplements
+                <span aria-hidden="true">↗</span>
+            </a>
+
+        </header>
+
+        <!-- Main content -->
+        <main class="error-main">
+
+            <p class="error-eyebrow">
+                <span class="error-status-dot"></span>
+                {% block error_label %}SOMETHING WENT WRONG{% endblock %}
+            </p>
+
+            <h1 class="error-code" aria-label="Error {% block error_code %}404{% endblock %}">
+                {% block error_number %}404{% endblock %}
+            </h1>
+
+            <h2 class="error-title">
+                {% block error_title_start %}This page is{% endblock %}
+                <span>{% block error_title_end %}out of stock.{% endblock %}</span>
+            </h2>
+
+            <p class="error-description">
+                {% block error_description %}
+                    Looks like this page has disappeared.
+                    It may have been moved or the link might be incorrect.
+                {% endblock %}
+            </p>
+
+            <div class="error-actions">
+
+                <a
+                    href="{{ url_for('main.home') }}"
+                    class="error-button error-button-primary"
+                >
+                    <span>Back to homepage</span>
+
+                    <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                    >
+                        <path
+                            d="M7 17L17 7M7 7H17V17"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+                </a>
+
+                {% block error_secondary_action %}
+                <a
+                    href="{{ url_for('main.home') }}#shop"
+                    class="error-button error-button-secondary"
+                >
+                    Explore products
+                </a>
+                {% endblock %}
+
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="error-footer">
+
+            <p class="error-footer-note">
+                {% block error_note %}
+                    Your wellness journey doesn't stop here.
+                {% endblock %}
+            </p>
+
+            <p class="error-copyright">
+                &copy; 2025 VITALYX Nutrition Group Inc. All rights reserved.
+            </p>
+
+        </footer>
+
+    </div>
+
+</body>
+</html>

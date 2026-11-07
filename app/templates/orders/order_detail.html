@@ -1,0 +1,507 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ user_order.id }} | VITALYX{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/order.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+{% set has_pending_receipt = user_order.payments | selectattr('status', 'equalto', 'pending') | list | length > 0 %}
+{% set has_rejected_receipt = user_order.payments | selectattr('status', 'equalto', 'rejected') | list | length > 0 %}
+
+<main class="od-page">
+    <div class="od-container">
+
+        <!-- Breadcrumb -->
+        <nav class="od-breadcrumbs" aria-label="Breadcrumb">
+            <a href="{{ url_for('main.home') }}">Home</a>
+            <span aria-hidden="true">/</span>
+            <a href="{{ url_for('orders.my_orders') }}">My Orders</a>
+            <span aria-hidden="true">/</span>
+            <span class="od-breadcrumb-current">Order #{{ user_order.id }}</span>
+        </nav>
+
+        <!-- Page Header -->
+        <header class="od-header">
+            <div class="od-header-copy">
+                <span class="od-eyebrow">
+                    <span class="od-eyebrow-dot"></span>
+                    VITALYX STORE
+                </span>
+
+                <h1>Order Details</h1>
+
+                <p>
+                    Track your order, review the items, and check
+                    the latest status.
+                </p>
+            </div>
+
+            <div class="od-order-reference">
+                <span>ORDER NUMBER</span>
+                <strong>{{ user_order.order_number }}</strong>
+                <small>
+                    Order #{{ user_order.id }}
+                </small>
+            </div>
+        </header>
+
+        <div class="od-layout">
+
+            <!-- Main Column -->
+            <div class="od-main-column">
+
+                <!-- Order Status -->
+                <section class="od-card od-status-card">
+
+                    <div class="od-section-heading">
+                        <div>
+                            <span class="od-section-kicker">
+                                ORDER PROGRESS
+                            </span>
+                            <h2>Current status</h2>
+                        </div>
+
+                        {% if user_order.status in ["pending_review", "pending"] %}
+                            <span class="od-badge od-badge--pending">
+                                Pending Review
+                            </span>
+                        {% elif user_order.status == "awaiting_payment" %}
+                            <span class="od-badge od-badge--approved">
+                                Approved
+                            </span>
+                        {% elif user_order.status == "processing" %}
+                            <span class="od-badge od-badge--processing">
+                                Processing
+                            </span>
+                        {% elif user_order.status == "shipped" %}
+                            <span class="od-badge od-badge--shipped">
+                                Shipped
+                            </span>
+                        {% elif user_order.status == "delivered" %}
+                            <span class="od-badge od-badge--delivered">
+                                Delivered
+                            </span>
+                        {% elif user_order.status == "rejected" %}
+                            <span class="od-badge od-badge--rejected">
+                                Rejected
+                            </span>
+                        {% else %}
+                            <span class="od-badge">
+                                {{ user_order.status|replace("_", " ")|title }}
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <div class="od-status-content">
+
+                        <div class="od-status-icon
+                            {% if user_order.status in ['pending_review', 'pending'] %}
+                                od-status-icon--pending
+                            {% elif user_order.status == 'rejected' %}
+                                od-status-icon--rejected
+                            {% else %}
+                                od-status-icon--success
+                            {% endif %}
+                        ">
+                            {% if user_order.status in ["pending_review", "pending"] %}
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     aria-hidden="true">
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                    <path d="M12 7v5l3 2"></path>
+                                </svg>
+
+                            {% elif user_order.status == "rejected" %}
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     aria-hidden="true">
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                    <path d="m9 9 6 6"></path>
+                                    <path d="m15 9-6 6"></path>
+                                </svg>
+
+                            {% else %}
+                                <svg viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     aria-hidden="true">
+                                    <path d="m5 12 4 4L19 6"></path>
+                                </svg>
+                            {% endif %}
+                        </div>
+
+                        <div class="od-status-copy">
+
+                            {% if user_order.status in ["pending_review", "pending"] %}
+                                <h3>Your order is being reviewed</h3>
+                                <p>
+                                    Your order has been submitted successfully.
+                                    Our team will review it before payment
+                                    becomes available.
+                                </p>
+
+                            {% elif user_order.status == "awaiting_payment" %}
+                                <h3>Your order has been approved</h3>
+                                <p>
+                                    Your order is approved and ready for
+                                    the payment stage.
+                                </p>
+
+                            {% elif user_order.status == "processing" %}
+                                <h3>Your order is being prepared</h3>
+                                <p>
+                                    Payment has been confirmed. Your order
+                                    is now being prepared for shipment.
+                                </p>
+
+                            {% elif user_order.status == "shipped" %}
+                                <h3>Your order is on its way</h3>
+                                <p>
+                                    Your order has been shipped.
+                                    Check back for delivery updates.
+                                </p>
+
+                            {% elif user_order.status == "delivered" %}
+                                <h3>Your order has been delivered</h3>
+                                <p>
+                                    This order has been marked as delivered.
+                                </p>
+
+                            {% elif user_order.status == "rejected" %}
+                                <h3>Your order was not approved</h3>
+                                <p>
+                                    The order could not be approved and reserved stock was restored.
+                                </p>
+
+                            {% else %}
+                                <h3>
+                                    {{ user_order.status|replace("_", " ")|title }}
+                                </h3>
+                                <p>
+                                    Your order status is shown above.
+                                </p>
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                    <!-- Payment Status -->
+                    <div class="od-payment-status">
+                        <div class="od-payment-status-icon">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.8"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 aria-hidden="true">
+                                <rect x="2" y="5" width="20" height="14" rx="3"></rect>
+                                <path d="M2 10h20"></path>
+                            </svg>
+                        </div>
+
+                        <div class="od-payment-status-copy">
+                            <span>Payment status</span>
+                            <strong>
+                                {% if user_order.payment_status == "paid" %}
+                                    Paid
+                                {% elif has_pending_receipt %}
+                                    Receipt Under Review
+                                {% elif user_order.payment_status == "failed" or has_rejected_receipt %}
+                                    Payment Rejected — Action Required
+                                {% else %}
+                                    Unpaid
+                                {% endif %}
+                            </strong>
+                        </div>
+
+                        <span class="od-payment-indicator
+                            {% if user_order.payment_status == 'paid' %}
+                                od-payment-indicator--paid
+                            {% elif user_order.payment_status == 'failed' or has_rejected_receipt %}
+                                od-payment-indicator--failed
+                            {% else %}
+                                od-payment-indicator--unpaid
+                            {% endif %}
+                        "></span>
+                    </div>
+
+                    <!-- Payment Action -->
+                    {% if user_order.status == "awaiting_payment" and user_order.payment_status == "unpaid" %}
+                        {% if has_pending_receipt %}
+                            <div class="od-payment-notice">
+                                Your payment receipt has been submitted and is currently waiting for admin verification.
+                            </div>
+                        {% else %}
+                            <div class="od-payment-action">
+                                <p>
+                                    {% if has_rejected_receipt %}
+                                        Your previous payment receipt was not approved. Please submit a valid receipt to continue.
+                                    {% else %}
+                                        Your order and delivery information have been approved. Complete the payment to continue.
+                                    {% endif %}
+                                </p>
+
+                                <a
+                                    class="od-primary-button"
+                                    href="{{ url_for('payments.submit_payment', order_id=user_order.id) }}"
+                                >
+                                    Continue to Payment
+
+                                    <svg viewBox="0 0 24 24"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         aria-hidden="true">
+                                        <path d="M5 12h14"></path>
+                                        <path d="m12 5 7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                </section>
+
+                <!-- Order Items -->
+                <section class="od-card od-items-card">
+
+                    <div class="od-section-heading">
+                        <div>
+                            <span class="od-section-kicker">
+                                YOUR PURCHASE
+                            </span>
+                            <h2>Items in your order</h2>
+                        </div>
+
+                        <span class="od-item-count">
+                            {{ order_items|length }}
+                            {% if order_items|length == 1 %}
+                                item
+                            {% else %}
+                                items
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="od-items-list">
+                        {% for item in order_items %}
+                            <article class="od-item">
+
+                                <div class="od-item-visual" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="1.5"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round">
+                                        <path d="M8 3h8"></path>
+                                        <path d="M9 3v3l-3 3v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9l-3-3V3"></path>
+                                        <path d="M6 10h12"></path>
+                                    </svg>
+                                </div>
+
+                                <div class="od-item-info">
+                                    <h3>{{ item.product_name }}</h3>
+
+                                    <p class="od-item-unit-price">
+                                        ${{ "{:,.2f}".format(item.unit_price) }}
+                                        <span>each</span>
+                                    </p>
+
+                                    <span class="od-item-quantity">
+                                        Quantity: {{ item.quantity }}
+                                    </span>
+                                </div>
+
+                                <div class="od-item-total">
+                                    <strong>
+                                        ${{ "{:,.2f}".format(item.line_total) }}
+                                    </strong>
+                                    <span>USD</span>
+                                </div>
+
+                            </article>
+                        {% else %}
+                            <div class="od-empty-items">
+                                No items are associated with this order.
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </section>
+
+                <!-- Delivery Information -->
+                <section class="od-card od-delivery-card">
+
+                    <div class="od-section-heading">
+                        <div>
+                            <span class="od-section-kicker">
+                                SHIPPING DETAILS
+                            </span>
+                            <h2>Delivery information</h2>
+                        </div>
+
+                        <span class="od-delivery-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.7"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round">
+                                <path d="M3 7h11v10H3z"></path>
+                                <path d="M14 10h4l3 3v4h-7z"></path>
+                                <circle cx="7.5" cy="19" r="1.5"></circle>
+                                <circle cx="17.5" cy="19" r="1.5"></circle>
+                            </svg>
+                        </span>
+                    </div>
+
+                    <dl class="od-delivery-grid">
+
+                        <div class="od-info-field">
+                            <dt>Recipient</dt>
+                            <dd>{{ user_order.recipient_name }}</dd>
+                        </div>
+
+                        <div class="od-info-field">
+                            <dt>Phone number</dt>
+                            <dd>{{ user_order.phone }}</dd>
+                        </div>
+
+                        <div class="od-info-field">
+                            <dt>Postal code</dt>
+                            <dd>{{ user_order.postal_code }}</dd>
+                        </div>
+
+                        <div class="od-info-field od-info-field--full">
+                            <dt>Shipping address</dt>
+                            <dd>{{ user_order.shipping_address }}</dd>
+                        </div>
+
+                    </dl>
+                </section>
+
+            </div>
+
+            <!-- Summary Column -->
+            <aside class="od-sidebar">
+
+                <section class="od-card od-summary-card">
+                    <span class="od-section-kicker">
+                        ORDER SUMMARY
+                    </span>
+
+                    <h2>Payment overview</h2>
+
+                    <div class="od-summary-row">
+                        <span>Items subtotal</span>
+                        <strong>
+                            ${{ "{:,.2f}".format(user_order.subtotal) }}
+                        </strong>
+                    </div>
+
+                    <div class="od-summary-row">
+                        <span>Shipping</span>
+                        <strong>
+                            {% if user_order.shipping_cost == 0 %}
+                                Free
+                            {% else %}
+                                ${{ "{:,.2f}".format(user_order.shipping_cost) }}
+                            {% endif %}
+                        </strong>
+                    </div>
+
+                    {% if user_order.discount_amount > 0 %}
+                        <div class="od-summary-row od-summary-row--discount">
+                            <span>Discount</span>
+                            <strong>
+                                −${{ "{:,.2f}".format(user_order.discount_amount) }}
+                            </strong>
+                        </div>
+                    {% endif %}
+
+                    <div class="od-summary-divider"></div>
+
+                    <div class="od-summary-total">
+                        <span>Total amount</span>
+
+                        <strong>
+                            ${{ "{:,.2f}".format(user_order.total_amount) }}
+                            <small>USD</small>
+                        </strong>
+                    </div>
+
+                    <div class="od-summary-footer">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.7"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                            <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"></path>
+                            <path d="m9 12 2 2 4-4"></path>
+                        </svg>
+
+                        <p>
+                            Your order details are securely associated
+                            with your account.
+                        </p>
+                    </div>
+                </section>
+
+                <div class="od-order-date">
+                    <span>Order placed</span>
+                    <strong>
+                        {{ user_order.created_at.strftime("%b %d, %Y") }}
+                    </strong>
+                </div>
+
+            </aside>
+
+        </div>
+
+        <!-- Back Link -->
+        <div class="od-footer-actions">
+            <a
+                class="od-back-link"
+                href="{{ url_for('orders.my_orders') }}"
+            >
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="1.8"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     aria-hidden="true">
+                    <path d="M19 12H5"></path>
+                    <path d="m12 19-7-7 7-7"></path>
+                </svg>
+
+                Back to My Orders
+            </a>
+        </div>
+
+    </div>
+</main>
+
+{% endblock %}

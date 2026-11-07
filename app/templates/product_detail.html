@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} | VITALYX{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/product_detail.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<main class="pd-page">
+    <div class="pd-container">
+
+        <!-- Breadcrumb -->
+        <nav class="pd-breadcrumbs" aria-label="Breadcrumb">
+            <a href="{{ url_for('main.home') }}">Home</a>
+            <span aria-hidden="true">/</span>
+            {% if product.category %}
+                <a href="{{ url_for('main.home', category=product.category.slug) }}#shop">
+                    {{ product.category.name }}
+                </a>
+                <span aria-hidden="true">/</span>
+            {% endif %}
+            <span class="pd-breadcrumb-current" aria-current="page">
+                {{ product.name }}
+            </span>
+        </nav>
+
+        <div class="pd-layout">
+
+            <!-- Product gallery -->
+            <section class="pd-gallery" aria-label="Product gallery">
+                <div class="pd-image-card">
+
+                    <div class="pd-image-top">
+                        <span class="pd-brand-mark">
+                            <span class="pd-brand-icon">V</span>
+                            VITALYX
+                        </span>
+
+                        {% if product.stock > 0 %}
+                            <span class="pd-status pd-status--available">
+                                <span class="pd-status-dot"></span>
+                                In stock
+                            </span>
+                        {% else %}
+                            <span class="pd-status pd-status--unavailable">
+                                <span class="pd-status-dot"></span>
+                                Out of stock
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <div class="pd-image-stage">
+                        {% if product.image and product.image.startswith(('http://', 'https://')) %}
+                            {% set product_img_url = product.image %}
+                        {% elif product.image %}
+                            {% set product_img_url = url_for('static', filename='uploads/products/' ~ product.image) %}
+                        {% else %}
+                            {% set product_img_url = url_for('static', filename='images/products/default-product.png') %}
+                        {% endif %}
+
+                        <img
+                            class="pd-product-image"
+                            src="{{ product_img_url }}"
+                            alt="{{ product.name }}"
+                            fetchpriority="high"
+                            onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/products/default-product.png') }}';"
+                        >
+                    </div>
+
+                    <div class="pd-image-footer">
+                        <span class="pd-image-footer-label">PRODUCT DETAILS</span>
+                        <span class="pd-image-footer-line"></span>
+                    </div>
+                </div>
+
+                <div class="pd-gallery-note">
+                    <span class="pd-note-icon" aria-hidden="true">✓</span>
+                    <p>100% label transparency. Third-party tested for purity and potency.</p>
+                </div>
+            </section>
+
+            <!-- Product information -->
+            <section class="pd-information" aria-labelledby="pd-product-title">
+
+                {% if product.category %}
+                    <a href="{{ url_for('main.home', category=product.category.slug) }}#shop" class="pd-category-label">
+                        <span class="pd-category-marker"></span>
+                        {{ product.category.name }}
+                    </a>
+                {% endif %}
+
+                <h1 class="pd-title" id="pd-product-title">
+                    {{ product.name }}
+                </h1>
+
+                {% if product.brand %}
+                    <p class="pd-brand">
+                        Brand
+                        <strong>{{ product.brand }}</strong>
+                    </p>
+                {% endif %}
+
+                <div class="pd-price-block">
+                    <span class="pd-price-caption">YOUR PRICE</span>
+
+                    <div class="pd-price">
+                        <span class="pd-price-value">
+                            ${{ "{:,.2f}".format(product.price) }}
+                        </span>
+                        <span class="pd-price-currency">USD</span>
+                    </div>
+                </div>
+
+                <!-- Availability -->
+                <div class="pd-availability">
+                    <div class="pd-availability-icon {% if product.stock <= 0 %}pd-availability-icon--unavailable{% endif %}" aria-hidden="true">
+                        {% if product.stock > 0 %}✓{% else %}!{% endif %}
+                    </div>
+
+                    <div class="pd-availability-copy">
+                        <strong>
+                            {% if product.stock > 0 %}
+                                Available to order
+                            {% else %}
+                                Currently unavailable
+                            {% endif %}
+                        </strong>
+                        <span>
+                            {% if product.stock > 0 %}
+                                {{ product.stock }} units available
+                            {% else %}
+                                Please check back later.
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="pd-description">
+                    <h2 class="pd-section-title">About this product</h2>
+
+                    {% if product.description %}
+                        <p>{{ product.description }}</p>
+                    {% else %}
+                        <p class="pd-muted">
+                            Product information will be available soon.
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Purchase box -->
+                <section class="pd-purchase-box" aria-labelledby="pd-purchase-title">
+                    <div class="pd-purchase-heading">
+                        <div>
+                            <span class="pd-purchase-eyebrow">MAKE IT YOURS</span>
+                            <h2 id="pd-purchase-title">Ready to get started?</h2>
+                        </div>
+
+                        <span class="pd-cart-symbol" aria-hidden="true">
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                        </span>
+                    </div>
+
+                    <form
+                        class="pd-cart-form"
+                        action="{{ url_for(
+                            'cart.add_cart',
+                            product_id=product.id
+                        ) }}"
+                        method="POST"
+                    >
+                        <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="{{ csrf_token() }}"
+                        >
+
+                        <div class="pd-form-label-row">
+                            <label for="pd-quantity">Quantity</label>
+                            <span>
+                                {% if product.stock > 0 %}
+                                    {{ product.stock }} available
+                                {% else %}
+                                    Out of stock
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <div class="pd-cart-controls">
+                            <div class="pd-quantity-wrap">
+                                <input
+                                    class="pd-quantity"
+                                    id="pd-quantity"
+                                    type="number"
+                                    name="quantity"
+                                    value="1"
+                                    min="1"
+                                    max="{{ product.stock if product.stock > 0 else 1 }}"
+                                    step="1"
+                                    inputmode="numeric"
+                                    aria-label="Product quantity"
+                                    {% if product.stock <= 0 %}disabled{% endif %}
+                                    required
+                                >
+                            </div>
+
+                            <button
+                                class="pd-add-button"
+                                type="submit"
+                                {% if product.stock <= 0 %}disabled{% endif %}
+                            >
+                                <span>
+                                    {% if product.stock > 0 %}
+                                        Add to Cart
+                                    {% else %}
+                                        Out of Stock
+                                    {% endif %}
+                                </span>
+
+                                {% if product.stock > 0 %}
+                                    <svg
+                                        class="pd-button-arrow"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M5 12h14"></path>
+                                        <path d="m12 5 7 7-7 7"></path>
+                                    </svg>
+                                {% endif %}
+                            </button>
+                        </div>
+
+                        <p class="pd-purchase-note">
+                            Your selected quantity is subject to available stock.
+                        </p>
+                    </form>
+                </section>
+
+                <!-- Product metadata -->
+                <div class="pd-meta">
+                    <div class="pd-meta-row">
+                        <span>Product</span>
+                        <strong>{{ product.name }}</strong>
+                    </div>
+
+                    {% if product.brand %}
+                        <div class="pd-meta-row">
+                            <span>Brand</span>
+                            <strong>{{ product.brand }}</strong>
+                        </div>
+                    {% endif %}
+
+                    {% if product.category %}
+                        <div class="pd-meta-row">
+                            <span>Category</span>
+                            <strong>{{ product.category.name }}</strong>
+                        </div>
+                    {% endif %}
+
+                    <div class="pd-meta-row">
+                        <span>Availability</span>
+                        <strong>
+                            {% if product.stock > 0 %}
+                                In stock ({{ product.stock }})
+                            {% else %}
+                                Out of stock
+                            {% endif %}
+                        </strong>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

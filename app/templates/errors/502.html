@@ -1,0 +1,20 @@
+{% extends "errors/error_base.html" %}
+
+{% block title %}Server Error | VITALYX{% endblock %}
+
+{% block error_label %}TEMPORARY SERVER ISSUE{% endblock %}
+
+{% block error_code %}502{% endblock %}
+{% block error_number %}502{% endblock %}
+
+{% block error_title_start %}We're having{% endblock %}
+{% block error_title_end %}a moment.{% endblock %}
+
+{% block error_description %}
+Our server encountered a temporary issue while processing your request.
+Please wait a moment and try again shortly.
+{% endblock %}
+
+{% block error_note %}
+We'll be back to powering your performance.
+{% endblock %}

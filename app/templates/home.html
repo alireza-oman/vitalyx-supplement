@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% block title %}VITALYX — Elite Fitness Formulas{% endblock %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-container">
+        <div class="hero-content">
+            <div class="badge">⚡ Science-Backed Bio-Nutrition</div>
+            <h1 class="hero-title">UNLEASH YOUR <span class="gradient-text">INNER BEAST</span></h1>
+            <p class="hero-desc">
+                Engineered for athletes who refuse mediocre results. VITALYX delivers ultra-pure compounds, third-party verified for sheer strength, rapid recovery, and endurance.
+            </p>
+            <div class="hero-cta-group">
+                <a href="#shop" class="btn-primary">Shop All Formulas <i class='bx bx-right-arrow-alt'></i></a>
+                {% if not current_user or not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.signup') }}" class="btn-secondary">Join The Clan</a>
+                {% endif %}
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-num">100%</span>
+                    <span class="stat-label">Label Honesty</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-num">45k+</span>
+                    <span class="stat-label">Athletes Fueled</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-num">4.9/5</span>
+                    <span class="stat-label">Lab Rating</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="glow-sphere"></div>
+            <img src="{{ url_for('static', filename='uploads/products/homepage_image.png') }}"
+                 alt="VITALYX Premium Tub"
+                 class="hero-img"
+                 onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/products/default-product.png') }}';">
+        </div>
+    </div>
+</section>
+
+<!-- DYNAMIC CATEGORIES -->
+<section class="categories" id="categories">
+    <div class="section-header">
+        <h2 class="section-title">Fuel By <span class="gradient-text">Target Goal</span></h2>
+        <p>Formulations categorized to match your daily training split</p>
+    </div>
+
+    <div class="category-grid">
+        {% if categories %}
+            <a href="{{ url_for('main.home') }}#shop"
+               class="category-card {% if not selected_category %}active{% endif %}">
+                <i class='bx bx-grid-alt icon'></i>
+                <h3>All Formulas</h3>
+                <p>Explore our complete lineup of clinical-grade supplements.</p>
+            </a>
+
+            {% for cat in categories %}
+                <a href="{{ url_for('main.home', category=cat.slug) }}#shop"
+                   class="category-card {% if selected_category == cat.slug %}active{% endif %}">
+                    <i class='bx bx-check-circle icon'></i>
+                    <h3>{{ cat.name }}</h3>
+                    <p>{{ cat.description if cat.description else 'Engineered for optimal physiological adaptation.' }}</p>
+                </a>
+            {% endfor %}
+        {% else %}
+            <div class="category-card active">
+                <i class='bx bx-dumbbell icon'></i>
+                <h3>Hypertrophy</h3>
+                <p>Pure protein isolates and recovery peptides</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- DYNAMIC PRODUCTS -->
+<section class="products" id="shop">
+    <div class="section-header">
+        <h2 class="section-title">VITALYX <span class="gradient-text">Signature Series</span></h2>
+        <p>Highest grade raw compounds. Batch-tested for purity.</p>
+    </div>
+
+    <div class="product-grid">
+        {% if products %}
+            {% for product in products %}
+                <div class="product-card">
+                    {% if product.stock <= 0 %}
+                        <div class="badge-discount" style="background-color: #64748B;">Out of Stock</div>
+                    {% elif product.stock < 5 %}
+                        <div class="badge-discount">Only {{ product.stock }} Left</div>
+                    {% else %}
+                        <div class="badge-featured">{{ product.brand }}</div>
+                    {% endif %}
+
+                    <div class="product-img-wrap">
+                        <a href="{{ url_for('main.product_detail', slug=product.slug) }}">
+                            {% if product.image and product.image.startswith(('http://', 'https://')) %}
+                                {% set product_img_url = product.image %}
+                            {% elif product.image %}
+                                {% set product_img_url = url_for('static', filename='uploads/products/' ~ product.image) %}
+                            {% else %}
+                                {% set product_img_url = url_for('static', filename='images/products/default-product.png') %}
+                            {% endif %}
+
+                            <img
+                                src="{{ product_img_url }}"
+                                alt="{{ product.name }}"
+                                loading="lazy"
+                                onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/products/default-product.png') }}';"
+                            >
+                        </a>
+                    </div>
+
+                    <div class="product-details">
+                        <span class="category-tag">
+                            {{ product.category.name if product.category else 'Supplement' }}
+                        </span>
+
+                        <h3 class="product-title">
+                            <a href="{{ url_for('main.product_detail', slug=product.slug) }}">
+                                {{ product.name }}
+                            </a>
+                        </h3>
+
+                        <div class="rating">
+                            <i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i>
+                            <span>(Verified)</span>
+                        </div>
+
+                        <div class="product-footer">
+                            <div class="price-box">
+                                <span class="current-price">${{ "{:,.2f}".format(product.price) }}</span>
+                            </div>
+
+                            {% if product.stock > 0 %}
+                                <form action="{{ url_for('cart.add_cart', product_id=product.id) }}" method="POST">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                                    <button
+                                        type="submit"
+                                        class="add-to-cart-btn"
+                                        aria-label="Add {{ product.name }} to cart"
+                                    >
+                                        <i class='bx bx-cart-add'></i>
+                                    </button>
+                                </form>
+                            {% else %}
+                                <button class="add-to-cart-btn" disabled style="opacity: 0.4; cursor: not-allowed;" title="Out of stock">
+                                    <i class='bx bx-block'></i>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-products-box" style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem;">
+                <i class='bx bx-package' style="font-size: 3.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">No formulas found</h3>
+                <p style="color: var(--text-secondary);">
+                    {% if selected_category %}
+                        No products available in this category right now.
+                        <a href="{{ url_for('main.home') }}#shop" style="color: var(--primary); font-weight: 700;">View all products</a>
+                    {% else %}
+                        Add your first batch of products through the admin portal.
+                    {% endif %}
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- LAB SCIENCE / ABOUT SECTION -->
+<section class="categories" id="about">
+    <div class="section-header">
+        <h2 class="section-title">Clinical <span class="gradient-text">Lab Science</span></h2>
+        <p>Every batch is independently tested for purity, potency, and banned substances</p>
+    </div>
+
+    <div class="category-grid">
+        <div class="category-card">
+            <i class='bx bx-test-tube icon'></i>
+            <h3>Zero Proprietary Blends</h3>
+            <p>Full label disclosure down to the milligram. No hidden fillers or amino spiking.</p>
+        </div>
+        <div class="category-card">
+            <i class='bx bx-shield-Alt-2 icon'></i>
+            <h3>Heavy Metal Tested</h3>
+            <p>Rigorous third-party ISO-17025 lab screening for purity and safety compliance.</p>
+        </div>
+        <div class="category-card">
+            <i class='bx bx-bolt-circle icon'></i>
+            <h3>Clinical Dosages</h3>
+            <p>Formulated using peer-reviewed human performance studies for maximum bioavailability.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

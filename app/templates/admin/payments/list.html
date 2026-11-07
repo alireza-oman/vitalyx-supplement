@@ -1,0 +1,69 @@
+{% extends 'admin/model/list.html' %}
+
+{% block head_css %}
+    {{ super() }}
+
+    <style>
+        .vitalyx-payments-admin {
+            color: var(--adm-text);
+        }
+
+        .vitalyx-payments-admin .table-responsive {
+            border: 1px solid var(--adm-border);
+            border-radius: 12px;
+            background: var(--adm-surface);
+            overflow-x: auto;
+        }
+
+        .vitalyx-payments-admin table.table {
+            margin-bottom: 0;
+            border: none;
+        }
+
+        .payment-order-number {
+            color: var(--adm-primary);
+            font-weight: 700;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+
+        .payment-order-number:hover {
+            text-decoration: underline;
+        }
+
+        .payment-status {
+            display: inline-block;
+            padding: 5px 11px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .payment-status--pending {
+            color: #d97706;
+            background: rgba(245, 158, 11, 0.15);
+        }
+
+        .payment-status--approved {
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .payment-status--rejected {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        .payment-status--unknown {
+            color: var(--adm-text-muted);
+            background: var(--adm-surface-alt);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="vitalyx-payments-admin">
+    {{ super() }}
+</div>
+{% endblock %}

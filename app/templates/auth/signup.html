@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block title %}Create Account — VITALYX{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="auth-container">
+        <!-- Form Side -->
+        <div class="auth-box">
+            <div class="auth-header">
+                <span class="badge">Join the Elite</span>
+                <h2 class="auth-title">Become a <span class="gradient-text">Member</span></h2>
+                <p class="auth-subtitle">Unlock member drops, tracking, and clinical batch tests.</p>
+            </div>
+
+            <form method="POST" action="" class="auth-form" novalidate>
+                {{ form.hidden_tag() }}
+
+                <!-- Username Field -->
+                <div class="form-group">
+                    {{ form.username.label(class="form-label") }}
+                    <div class="input-wrapper {% if form.username.errors %}has-error{% endif %}">
+                        <i class='bx bx-user input-icon'></i>
+                        {{ form.username(class="form-input", placeholder="e.g. SpartanX", autocomplete="username") }}
+                    </div>
+                    {% if form.username.errors %}
+                        <div class="error-message">
+                            {% for error in form.username.errors %}
+                                <span><i class='bx bx-error-circle'></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Email Field -->
+                <div class="form-group">
+                    {{ form.email.label(class="form-label") }}
+                    <div class="input-wrapper {% if form.email.errors %}has-error{% endif %}">
+                        <i class='bx bx-envelope input-icon'></i>
+                        {{ form.email(class="form-input", placeholder="athlete@vitalyx.com", autocomplete="email") }}
+                    </div>
+                    {% if form.email.errors %}
+                        <div class="error-message">
+                            {% for error in form.email.errors %}
+                                <span><i class='bx bx-error-circle'></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    {{ form.password.label(class="form-label") }}
+                    <div class="input-wrapper {% if form.password.errors %}has-error{% endif %}">
+                        <i class='bx bx-lock-alt input-icon'></i>
+                        {{ form.password(class="form-input", placeholder="Minimum 6 characters", autocomplete="new-password") }}
+                        <button type="button" class="toggle-password" aria-label="Show password">
+                            <i class='bx bx-hide'></i>
+                        </button>
+                    </div>
+                    {% if form.password.errors %}
+                        <div class="error-message">
+                            {% for error in form.password.errors %}
+                                <span><i class='bx bx-error-circle'></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div class="form-group">
+                    {{ form.confirm_password.label(class="form-label") }}
+                    <div class="input-wrapper {% if form.confirm_password.errors %}has-error{% endif %}">
+                        <i class='bx bx-check-shield input-icon'></i>
+                        {{ form.confirm_password(class="form-input", placeholder="Repeat password", autocomplete="new-password") }}
+                        <button type="button" class="toggle-password" aria-label="Show password">
+                            <i class='bx bx-hide'></i>
+                        </button>
+                    </div>
+                    {% if form.confirm_password.errors %}
+                        <div class="error-message">
+                            {% for error in form.confirm_password.errors %}
+                                <span><i class='bx bx-error-circle'></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-submit">
+                    {{ form.submit(class="btn-primary auth-submit-btn") }}
+                </div>
+            </form>
+
+            <div class="auth-footer">
+                <p>Already registered with VITALYX? <a href="{{ url_for('auth.login') }}" class="auth-switch-link">Log In</a></p>
+            </div>
+        </div>
+
+        <!-- Visual Side -->
+        <div class="auth-visual">
+            <div class="visual-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1000&auto=format&fit=crop" alt="Gym Workout" class="visual-img">
+            <div class="visual-content">
+                <div class="visual-badge"><i class='bx bx-check-double'></i> 100% Guaranteed</div>
+                <h3>"Do not lower your goals. Elevate your fuel."</h3>
+                <span>Clinical Dosage • Purity Certified</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

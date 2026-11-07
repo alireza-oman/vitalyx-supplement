@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders | VITALYX{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/order.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+<section class="orders-page">
+
+    <div class="orders-header">
+        <div>
+            <span class="section-label">YOUR ACCOUNT</span>
+            <h1>My Orders</h1>
+            <p>Track and manage your VITALYX orders.</p>
+        </div>
+
+        <a href="{{ url_for('main.home') }}#shop" class="continue-shopping">
+            Continue Shopping
+            <i class="bx bx-right-arrow-alt"></i>
+        </a>
+    </div>
+
+    {% if orders %}
+
+        <div class="orders-list">
+
+            {% for order in orders %}
+                {% set has_pending_receipt = order.payments | selectattr('status', 'equalto', 'pending') | list | length > 0 %}
+
+                <article class="order-card">
+
+                    <div class="order-top">
+
+                        <div class="order-number">
+                            <span>ORDER NUMBER</span>
+                            <h3>{{ order.order_number }}</h3>
+                        </div>
+
+                        <div class="order-date">
+                            <span>ORDER DATE</span>
+                            <p>
+                                {{ order.created_at.strftime('%b %d, %Y') }}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="order-details">
+
+                        <div class="order-info">
+                            <span>Order Status</span>
+
+                            <span class="status-badge status-{{ order.status }}">
+                                {{ order.status.replace('_', ' ') | title }}
+                            </span>
+                        </div>
+
+                        <div class="order-info">
+                            <span>Payment</span>
+
+                            {% if order.payment_status == "unpaid" and has_pending_receipt %}
+                                <span class="status-badge payment-pending">
+                                    Receipt Under Review
+                                </span>
+                            {% else %}
+                                <span class="status-badge payment-{{ order.payment_status }}">
+                                    {{ order.payment_status.replace('_', ' ') | title }}
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="order-info">
+                            <span>Total Amount</span>
+
+                            <strong>
+                                ${{ "{:,.2f}".format(order.total_amount) }}
+                            </strong>
+                        </div>
+
+                    </div>
+
+                    <div class="order-footer">
+
+                        <span class="order-id">
+                            Order #{{ order.id }}
+                        </span>
+
+                        <a
+                            href="{{ url_for('orders.order_detail', order_id=order.id) }}"
+                            class="view-order-btn"
+                        >
+                            View Order
+                            <i class="bx bx-right-arrow-alt"></i>
+                        </a>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-orders">
+
+            <div class="empty-icon">
+                <i class="bx bx-package"></i>
+            </div>
+
+            <h2>No Orders Yet</h2>
+
+            <p>
+                You haven't placed any orders yet.
+                Start exploring our premium supplements.
+            </p>
+
+            <a href="{{ url_for('main.home') }}#shop" class="shop-now-btn">
+                Explore Products
+                <i class="bx bx-right-arrow-alt"></i>
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</section>
+{% endblock %}

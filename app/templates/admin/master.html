@@ -1,0 +1,71 @@
+{% extends 'admin/base.html' %}
+
+{% block head_css %}
+    {{ super() }}
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Custom Admin Theme CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_theme.css') }}">
+{% endblock %}
+
+{% block brand %}
+    <a class="navbar-brand brand-admin" href="{{ admin_view.admin.url }}">
+        VITALYX<span>.ADMIN</span>
+    </a>
+{% endblock %}
+
+{% block access_control %}
+    <ul class="nav navbar-nav navbar-right admin-top-actions">
+        <!-- Theme Toggle Button -->
+        <li>
+            <button id="admin-theme-toggle" class="admin-theme-btn" type="button" title="Toggle Theme">
+                <i class='bx bx-moon' id="admin-theme-icon"></i>
+            </button>
+        </li>
+        <li>
+            <a href="{{ url_for('main.home') }}" target="_blank" class="nav-store-link">
+                <i class='bx bx-store-alt'></i> View Store
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('auth.logout') }}" class="nav-logout-link">
+                <i class='bx bx-log-out'></i> Log Out
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <!-- Admin Theme Switcher Script -->
+    <script>
+        (function() {
+            const toggleBtn = document.getElementById('admin-theme-toggle');
+            const themeIcon = document.getElementById('admin-theme-icon');
+            const html = document.documentElement;
+
+            const savedTheme = localStorage.getItem('vitalyx_admin_theme') || 'dark';
+            html.setAttribute('data-theme', savedTheme);
+            updateIcon(savedTheme);
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    const currentTheme = html.getAttribute('data-theme') || 'dark';
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    html.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('vitalyx_admin_theme', newTheme);
+                    updateIcon(newTheme);
+                });
+            }
+
+            function updateIcon(theme) {
+                if (!themeIcon) return;
+                themeIcon.className = theme === 'dark' ? 'bx bx-sun' : 'bx bx-moon';
+            }
+        })();
+    </script>
+{% endblock %}

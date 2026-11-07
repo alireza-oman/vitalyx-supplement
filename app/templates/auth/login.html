@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Log In — VITALYX{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="auth-container">
+        <!-- Form Side -->
+        <div class="auth-box">
+            <div class="auth-header">
+                <span class="badge">Welcome Back</span>
+                <h2 class="auth-title">Log In to <span class="gradient-text">VITALYX</span></h2>
+                <p class="auth-subtitle">Access your VIP discounts, saved formulas, and order pipeline.</p>
+            </div>
+
+            <form method="POST" action="" class="auth-form" novalidate>
+                {{ form.hidden_tag() }}
+
+                <!-- Email Field -->
+                <div class="form-group">
+                    {{ form.email.label(class="form-label") }}
+                    <div class="input-wrapper {% if form.email.errors %}has-error{% endif %}">
+                        <i class='bx bx-envelope input-icon'></i>
+                        {{ form.email(class="form-input", placeholder="athlete@vitalyx.com", autocomplete="email") }}
+                    </div>
+                    {% if form.email.errors %}
+                        <div class="error-message">
+                            {% for error in form.email.errors %}
+                                <span><i class='bx bx-error-circle'></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    {{ form.password.label(class="form-label") }}
+                    <div class="input-wrapper {% if form.password.errors %}has-error{% endif %}">
+                        <i class='bx bx-lock-alt input-icon'></i>
+                        {{ form.password(class="form-input", placeholder="Enter your password", autocomplete="current-password") }}
+                        <button type="button" class="toggle-password" aria-label="Show password">
+                            <i class='bx bx-hide'></i>
+                        </button>
+                    </div>
+                    {% if form.password.errors %}
+                        <div class="error-message">
+                            {% for error in form.password.errors %}
+                                <span><i class='bx bx-error-circle'></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Options Row: Remember Me -->
+                <div class="form-options-row">
+                    <label class="custom-checkbox-container">
+                        {{ form.remember_me(class="custom-checkbox-input") }}
+                        <span class="checkbox-checkmark"></span>
+                        <span class="checkbox-text">{{ form.remember_me.label.text }}</span>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-submit">
+                    {{ form.submit(class="btn-primary auth-submit-btn") }}
+                </div>
+            </form>
+
+            <div class="auth-footer">
+                <p>New to VITALYX? <a href="{{ url_for('auth.signup') }}" class="auth-switch-link">Create Account</a></p>
+            </div>
+        </div>
+
+        <!-- Visual Side -->
+        <div class="auth-visual">
+            <div class="visual-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1000&auto=format&fit=crop" alt="Athlete training" class="visual-img">
+            <div class="visual-content">
+                <div class="visual-badge"><i class='bx bx-bolt-circle'></i> Raw Power</div>
+                <h3>"Obsession beats talent when talent stops sweating."</h3>
+                <span>VITALYX Pure Nutrition • Zero Fillers</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

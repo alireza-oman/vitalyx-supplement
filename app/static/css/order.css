@@ -1,0 +1,1443 @@
+/* =========================================================
+   VITALYX — ORDERS
+   Shared styles for My Orders and Order Details
+   Light + Dark themes | Responsive | Unified typography
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1. Shared design tokens
+   --------------------------------------------------------- */
+
+.od-page,
+.orders-page {
+    --order-page-bg: var(--bg-surface, #f8f7fc);
+    --order-card-bg: #ffffff;
+    --order-subtle-bg: #f7f5fc;
+
+    --order-text: var(--text-primary, #241f30);
+    --order-muted: var(--text-secondary, #716b7e);
+    --order-border: var(--border-color, #e8e3f0);
+
+    --order-primary: var(--primary, #7655d9);
+    --order-primary-hover: var(--primary-hover, #6242c2);
+    --order-primary-soft: var(--primary-glow, rgba(118, 85, 217, .12));
+
+    --order-success: #168653;
+    --order-success-bg: rgba(22, 134, 83, .11);
+    --order-warning: #a66b00;
+    --order-warning-bg: rgba(217, 151, 20, .14);
+    --order-danger: #d33e50;
+    --order-danger-bg: rgba(211, 62, 80, .11);
+    --order-info: #2876c7;
+    --order-info-bg: rgba(40, 118, 199, .12);
+
+    --order-radius: 14px;
+    --order-card-shadow: 0 5px 20px rgba(35, 24, 61, .045);
+
+    color: var(--order-text);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+[data-theme="dark"] .od-page,
+[data-theme="dark"] .orders-page {
+    --order-page-bg: #121019;
+    --order-card-bg: #1b1825;
+    --order-subtle-bg: #242031;
+
+    --order-text: #f3effb;
+    --order-muted: #aaa2b9;
+    --order-border: #383145;
+
+    --order-primary: #a58af4;
+    --order-primary-hover: #b69fff;
+    --order-primary-soft: rgba(165, 138, 244, .16);
+
+    --order-success: #48cf91;
+    --order-success-bg: rgba(72, 207, 145, .13);
+    --order-warning: #f2c15e;
+    --order-warning-bg: rgba(242, 193, 94, .13);
+    --order-danger: #ff788a;
+    --order-danger-bg: rgba(255, 120, 138, .13);
+    --order-info: #73b7ff;
+    --order-info-bg: rgba(115, 183, 255, .13);
+
+    --order-card-shadow: 0 8px 26px rgba(0, 0, 0, .16);
+}
+
+.od-page *,
+.od-page *::before,
+.od-page *::after,
+.orders-page *,
+.orders-page *::before,
+.orders-page *::after {
+    box-sizing: border-box;
+}
+
+.od-page a,
+.orders-page a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.od-page a:focus-visible,
+.orders-page a:focus-visible,
+.od-page button:focus-visible,
+.orders-page button:focus-visible {
+    outline: 2px solid var(--order-primary);
+    outline-offset: 4px;
+}
+
+/* ---------------------------------------------------------
+   2. My Orders page
+   --------------------------------------------------------- */
+
+.orders-page {
+    width: min(1120px, calc(100% - 48px));
+    min-height: 70vh;
+    margin: 0 auto;
+    padding: 72px 0 100px;
+}
+
+.orders-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 42px;
+}
+
+.orders-header > div {
+    min-width: 0;
+}
+
+.section-label {
+    display: inline-block;
+    color: var(--order-primary);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+}
+
+.orders-header h1 {
+    margin: 10px 0;
+    color: var(--order-text);
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.2;
+}
+
+.orders-header p {
+    margin: 0;
+    color: var(--order-muted);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.7;
+}
+
+.continue-shopping,
+.shop-now-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    flex-shrink: 0;
+    padding: 13px 19px;
+    border: 1px solid var(--order-primary);
+    border-radius: 9px;
+    color: #ffffff;
+    background: var(--order-primary);
+    box-shadow: 0 5px 15px var(--order-primary-soft);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background-color .2s ease, border-color .2s ease,
+                box-shadow .2s ease, transform .2s ease;
+}
+
+.continue-shopping:hover,
+.shop-now-btn:hover {
+    color: #ffffff;
+    border-color: var(--order-primary-hover);
+    background: var(--order-primary-hover);
+    box-shadow: 0 7px 20px var(--order-primary-soft);
+    transform: translateY(-2px);
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order-card {
+    min-width: 0;
+    padding: 26px;
+    border: 1px solid var(--order-border);
+    border-radius: var(--order-radius);
+    background: var(--order-card-bg);
+    box-shadow: var(--order-card-shadow);
+    transition: border-color .2s ease, transform .2s ease,
+                box-shadow .2s ease;
+}
+
+.order-card:hover {
+    border-color: var(--order-primary);
+    box-shadow: 0 10px 28px var(--order-primary-soft);
+    transform: translateY(-2px);
+}
+
+.order-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 21px;
+    border-bottom: 1px solid var(--order-border);
+}
+
+.order-number span,
+.order-date span {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--order-muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .8px;
+}
+
+.order-number h3 {
+    margin: 0;
+    color: var(--order-text);
+    font-size: 17px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.order-date p {
+    margin: 0;
+    color: var(--order-text);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.order-details {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    padding: 23px 0;
+}
+
+.order-info {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.order-info > span:first-child {
+    color: var(--order-muted);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.order-info strong {
+    color: var(--order-text);
+    font-size: 16px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    padding: 7px 11px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: var(--order-primary-soft);
+    color: var(--order-primary);
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.4;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+/* Order status colors */
+.status-pending,
+.status-pending_review {
+    color: var(--order-warning);
+    border-color: var(--order-warning-bg);
+    background: var(--order-warning-bg);
+}
+
+.status-awaiting_payment {
+    color: var(--order-primary);
+    border-color: var(--order-primary-soft);
+    background: var(--order-primary-soft);
+}
+
+.status-processing,
+.status-shipped {
+    color: var(--order-info);
+    border-color: var(--order-info-bg);
+    background: var(--order-info-bg);
+}
+
+.status-delivered {
+    color: var(--order-success);
+    border-color: var(--order-success-bg);
+    background: var(--order-success-bg);
+}
+
+.status-rejected {
+    color: var(--order-danger);
+    border-color: var(--order-danger-bg);
+    background: var(--order-danger-bg);
+}
+
+/* Payment status colors */
+.payment-paid {
+    color: var(--order-success);
+    border-color: var(--order-success-bg);
+    background: var(--order-success-bg);
+}
+
+.payment-unpaid,
+.payment-pending {
+    color: var(--order-warning);
+    border-color: var(--order-warning-bg);
+    background: var(--order-warning-bg);
+}
+
+.payment-failed,
+.payment-rejected {
+    color: var(--order-danger);
+    border-color: var(--order-danger-bg);
+    background: var(--order-danger-bg);
+}
+
+.order-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 19px;
+    border-top: 1px solid var(--order-border);
+}
+
+.order-id {
+    color: var(--order-muted);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.view-order-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--order-primary);
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: color .2s ease, gap .2s ease;
+}
+
+.view-order-btn:hover {
+    color: var(--order-primary-hover);
+    gap: 11px;
+}
+
+.empty-orders {
+    padding: 82px 24px;
+    border: 1px solid var(--order-border);
+    border-radius: var(--order-radius);
+    background: var(--order-card-bg);
+    box-shadow: var(--order-card-shadow);
+    text-align: center;
+}
+
+.empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 82px;
+    height: 82px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: var(--order-primary-soft);
+    color: var(--order-primary);
+    font-size: 39px;
+}
+
+.empty-orders h2 {
+    margin: 0 0 10px;
+    color: var(--order-text);
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.empty-orders p {
+    max-width: 420px;
+    margin: 0 auto 23px;
+    color: var(--order-muted);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.8;
+}
+
+/* ---------------------------------------------------------
+   3. Order Details page — layout and header
+   --------------------------------------------------------- */
+
+.od-page {
+    min-height: 70vh;
+    padding: 42px 0 85px;
+    background: var(--order-page-bg);
+}
+
+.od-container {
+    width: min(1120px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+.od-breadcrumbs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+    color: var(--order-muted);
+    font-size: 13px;
+}
+
+.od-breadcrumbs a {
+    color: var(--order-muted);
+    text-decoration: none;
+    transition: color .2s ease;
+}
+
+.od-breadcrumbs a:hover,
+.od-back-link:hover {
+    color: var(--order-primary);
+}
+
+.od-breadcrumb-current {
+    color: var(--order-text);
+    font-weight: 700;
+}
+
+.od-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 26px;
+    margin-bottom: 32px;
+}
+
+.od-header-copy {
+    min-width: 0;
+}
+
+.od-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--order-primary);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.6px;
+}
+
+.od-eyebrow-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--order-primary);
+}
+
+.od-header h1 {
+    margin: 12px 0 10px;
+    color: var(--order-text);
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.2;
+}
+
+.od-header-copy > p {
+    max-width: 540px;
+    margin: 0;
+    color: var(--order-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.od-order-reference {
+    display: flex;
+    min-width: 210px;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 7px;
+    padding: 18px 20px;
+    border: 1px solid var(--order-border);
+    border-radius: 12px;
+    background: var(--order-card-bg);
+    box-shadow: var(--order-card-shadow);
+}
+
+.od-order-reference > span {
+    color: var(--order-muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .8px;
+}
+
+.od-order-reference > strong {
+    color: var(--order-primary);
+    font-size: 15px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.od-order-reference > small {
+    color: var(--order-muted);
+    font-size: 12px;
+}
+
+/* ---------------------------------------------------------
+   4. Order Details — main grid and shared cards
+   --------------------------------------------------------- */
+
+.od-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    align-items: start;
+    gap: 24px;
+}
+
+.od-main-column,
+.od-sidebar {
+    display: grid;
+    min-width: 0;
+    gap: 20px;
+}
+
+.od-card {
+    min-width: 0;
+    padding: 25px;
+    border: 1px solid var(--order-border);
+    border-radius: var(--order-radius);
+    background: var(--order-card-bg);
+    box-shadow: var(--order-card-shadow);
+}
+
+.od-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.od-section-kicker {
+    display: block;
+    color: var(--order-primary);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    line-height: 1.5;
+}
+
+.od-section-heading h2,
+.od-summary-card h2 {
+    margin: 7px 0 0;
+    color: var(--order-text);
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -.25px;
+    line-height: 1.4;
+}
+
+/* ---------------------------------------------------------
+   5. Order status and payment status
+   --------------------------------------------------------- */
+
+.od-status-card {
+    border-top: 3px solid var(--order-primary);
+}
+
+.od-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 7px 11px;
+    border: 1px solid var(--order-border);
+    border-radius: 7px;
+    color: var(--order-muted);
+    background: var(--order-subtle-bg);
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.od-badge--pending {
+    color: var(--order-warning);
+    border-color: var(--order-warning-bg);
+    background: var(--order-warning-bg);
+}
+
+.od-badge--approved,
+.od-badge--delivered {
+    color: var(--order-success);
+    border-color: var(--order-success-bg);
+    background: var(--order-success-bg);
+}
+
+.od-badge--processing,
+.od-badge--shipped {
+    color: var(--order-info);
+    border-color: var(--order-info-bg);
+    background: var(--order-info-bg);
+}
+
+.od-badge--rejected {
+    color: var(--order-danger);
+    border-color: var(--order-danger-bg);
+    background: var(--order-danger-bg);
+}
+
+.od-status-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-top: 24px;
+    padding: 19px;
+    border: 1px solid var(--order-border);
+    border-radius: 11px;
+    background: var(--order-subtle-bg);
+}
+
+.od-status-icon,
+.od-payment-status-icon,
+.od-delivery-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border: 1px solid var(--order-primary-soft);
+    border-radius: 10px;
+    color: var(--order-primary);
+    background: var(--order-primary-soft);
+}
+
+.od-status-icon {
+    width: 46px;
+    height: 46px;
+}
+
+.od-status-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.od-status-icon--pending {
+    color: var(--order-warning);
+    border-color: var(--order-warning-bg);
+    background: var(--order-warning-bg);
+}
+
+.od-status-icon--success {
+    color: var(--order-success);
+    border-color: var(--order-success-bg);
+    background: var(--order-success-bg);
+}
+
+.od-status-icon--rejected {
+    color: var(--order-danger);
+    border-color: var(--order-danger-bg);
+    background: var(--order-danger-bg);
+}
+
+.od-status-copy {
+    min-width: 0;
+    padding-top: 2px;
+}
+
+.od-status-copy h3 {
+    margin: 0 0 7px;
+    color: var(--order-text);
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.5;
+}
+
+.od-status-copy p {
+    max-width: 570px;
+    margin: 0;
+    color: var(--order-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.od-payment-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 14px;
+    border: 1px solid var(--order-border);
+    border-radius: 11px;
+    background: var(--order-card-bg);
+}
+
+.od-payment-status-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.od-payment-status-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.od-payment-status-copy {
+    display: grid;
+    min-width: 0;
+    gap: 4px;
+}
+
+.od-payment-status-copy span {
+    color: var(--order-muted);
+    font-size: 13px;
+}
+
+.od-payment-status-copy strong {
+    color: var(--order-text);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.od-payment-indicator {
+    width: 8px;
+    height: 8px;
+    margin-left: auto;
+    flex-shrink: 0;
+    border-radius: 50%;
+}
+
+.od-payment-indicator--paid {
+    background: var(--order-success);
+    box-shadow: 0 0 0 4px var(--order-success-bg);
+}
+
+.od-payment-indicator--unpaid {
+    background: var(--order-warning);
+    box-shadow: 0 0 0 4px var(--order-warning-bg);
+}
+
+.od-payment-indicator--failed {
+    background: var(--order-danger);
+    box-shadow: 0 0 0 4px var(--order-danger-bg);
+}
+
+.od-payment-action {
+    display: grid;
+    gap: 14px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--order-border);
+}
+
+.od-payment-action > p {
+    margin: 0;
+    color: var(--order-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.od-primary-button {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 17px;
+    border: 1px solid var(--order-primary);
+    border-radius: 9px;
+    color: #ffffff;
+    background: var(--order-primary);
+    box-shadow: 0 4px 12px var(--order-primary-soft);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color .2s ease, border-color .2s ease,
+                box-shadow .2s ease, transform .2s ease;
+}
+
+.od-primary-button:hover {
+    color: #ffffff;
+    border-color: var(--order-primary-hover);
+    background: var(--order-primary-hover);
+    box-shadow: 0 6px 17px var(--order-primary-soft);
+    transform: translateY(-1px);
+}
+
+.od-primary-button svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.od-payment-notice {
+    margin-top: 17px;
+    padding: 12px 14px;
+    border: 1px solid var(--order-border);
+    border-radius: 9px;
+    color: var(--order-muted);
+    background: var(--order-subtle-bg);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* ---------------------------------------------------------
+   6. Order items
+   --------------------------------------------------------- */
+
+.od-item-count {
+    flex-shrink: 0;
+    padding: 6px 10px;
+    border: 1px solid var(--order-primary-soft);
+    border-radius: 7px;
+    color: var(--order-primary);
+    background: var(--order-primary-soft);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.od-items-list {
+    margin-top: 22px;
+    border-top: 1px solid var(--order-border);
+}
+
+.od-item {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 16px;
+    padding: 19px 0;
+    border-bottom: 1px solid var(--order-border);
+}
+
+.od-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.od-item-visual {
+    display: grid;
+    width: 66px;
+    height: 72px;
+    flex-shrink: 0;
+    place-items: center;
+    border: 1px solid var(--order-border);
+    border-radius: 10px;
+    color: var(--order-primary);
+    background: var(--order-subtle-bg);
+}
+
+.od-item-visual svg {
+    width: 28px;
+    height: 28px;
+}
+
+.od-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.od-item-info h3 {
+    margin: 0 0 6px;
+    color: var(--order-text);
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.od-item-unit-price {
+    margin: 0 0 8px;
+    color: var(--order-text);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.od-item-unit-price span,
+.od-item-total span {
+    color: var(--order-muted);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.od-item-quantity {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 8px;
+    border-radius: 6px;
+    color: var(--order-muted);
+    background: var(--order-subtle-bg);
+    font-size: 12px;
+}
+
+.od-item-total {
+    display: grid;
+    flex-shrink: 0;
+    justify-items: end;
+    gap: 5px;
+    text-align: right;
+}
+
+.od-item-total strong {
+    color: var(--order-text);
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+.od-empty-items {
+    padding-top: 22px;
+    color: var(--order-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* ---------------------------------------------------------
+   7. Delivery information
+   --------------------------------------------------------- */
+
+.od-delivery-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.od-delivery-icon svg {
+    width: 21px;
+    height: 21px;
+}
+
+.od-delivery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+    margin: 22px 0 0;
+}
+
+.od-info-field {
+    min-width: 0;
+    padding: 14px 15px;
+    border: 1px solid var(--order-border);
+    border-radius: 10px;
+    background: var(--order-subtle-bg);
+}
+
+.od-info-field dt {
+    margin-bottom: 7px;
+    color: var(--order-muted);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.od-info-field dd {
+    margin: 0;
+    color: var(--order-text);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+.od-info-field--full {
+    grid-column: 1 / -1;
+}
+
+.od-info-field--full dd {
+    white-space: pre-line;
+}
+
+/* ---------------------------------------------------------
+   8. Order summary
+   --------------------------------------------------------- */
+
+.od-summary-card {
+    position: sticky;
+    top: 24px;
+    padding: 23px;
+    border-top: 3px solid var(--order-primary);
+}
+
+.od-summary-card h2 {
+    margin: 8px 0 23px;
+}
+
+.od-summary-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 17px 0;
+}
+
+.od-summary-row > span {
+    color: var(--order-muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.od-summary-row > strong {
+    color: var(--order-text);
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.7;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+.od-summary-row > strong small {
+    color: var(--order-muted);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.od-summary-row--discount > span,
+.od-summary-row--discount > strong {
+    color: var(--order-success);
+}
+
+.od-summary-divider {
+    height: 1px;
+    margin: 21px 0;
+    background: var(--order-border);
+}
+
+.od-summary-total {
+    display: grid;
+    gap: 10px;
+    padding: 17px;
+    border: 1px solid var(--order-primary-soft);
+    border-radius: 10px;
+    background: var(--order-primary-soft);
+}
+
+.od-summary-total > span {
+    color: var(--order-muted);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.od-summary-total > strong {
+    color: var(--order-primary);
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -.4px;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+.od-summary-total > strong small {
+    color: var(--order-text);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.od-summary-footer {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 21px;
+    padding-top: 17px;
+    border-top: 1px solid var(--order-border);
+}
+
+.od-summary-footer svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--order-success);
+}
+
+.od-summary-footer p {
+    margin: 0;
+    color: var(--order-muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* ---------------------------------------------------------
+   9. Order date, flash messages and footer actions
+   --------------------------------------------------------- */
+
+.od-order-date {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px 17px;
+    border: 1px solid var(--order-border);
+    border-radius: 10px;
+    background: var(--order-card-bg);
+    box-shadow: var(--order-card-shadow);
+}
+
+.od-order-date span {
+    color: var(--order-muted);
+    font-size: 13px;
+}
+
+.od-order-date strong {
+    color: var(--order-text);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.od-flash-list {
+    display: grid;
+    gap: 9px;
+    margin-bottom: 22px;
+}
+
+.od-flash {
+    padding: 12px 15px;
+    border: 1px solid var(--order-border);
+    border-radius: 9px;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.od-flash--success {
+    color: var(--order-success);
+    border-color: var(--order-success-bg);
+    background: var(--order-success-bg);
+}
+
+.od-flash--warning {
+    color: var(--order-warning);
+    border-color: var(--order-warning-bg);
+    background: var(--order-warning-bg);
+}
+
+.od-flash--danger,
+.od-flash--error {
+    color: var(--order-danger);
+    border-color: var(--order-danger-bg);
+    background: var(--order-danger-bg);
+}
+
+.od-flash--info {
+    color: var(--order-primary);
+    border-color: var(--order-primary-soft);
+    background: var(--order-primary-soft);
+}
+
+.od-footer-actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 27px;
+}
+
+.od-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--order-muted);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color .2s ease;
+}
+
+.od-back-link svg {
+    width: 18px;
+    height: 18px;
+    transition: transform .2s ease;
+}
+
+.od-back-link:hover svg {
+    transform: translateX(-3px);
+}
+
+/* ---------------------------------------------------------
+   10. Responsive layout
+   --------------------------------------------------------- */
+
+@media (max-width: 960px) {
+    .od-container,
+    .orders-page {
+        width: calc(100% - 36px);
+    }
+
+    .od-layout {
+        grid-template-columns: minmax(0, 1fr) 285px;
+        gap: 18px;
+    }
+
+    .od-card {
+        padding: 22px;
+    }
+
+    .od-summary-card {
+        padding: 21px 18px;
+    }
+}
+
+@media (max-width: 760px) {
+    .orders-page {
+        padding: 48px 0 75px;
+    }
+
+    .orders-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 18px;
+        margin-bottom: 30px;
+    }
+
+    .orders-header h1,
+    .od-header h1 {
+        font-size: 30px;
+    }
+
+    .order-card {
+        padding: 21px;
+    }
+
+    .od-page {
+        padding: 28px 0 58px;
+    }
+
+    .od-container,
+    .orders-page {
+        width: calc(100% - 32px);
+    }
+
+    .od-breadcrumbs {
+        margin-bottom: 23px;
+    }
+
+    .od-header {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 17px;
+        margin-bottom: 25px;
+    }
+
+    .od-order-reference {
+        width: 100%;
+        min-width: 0;
+        align-items: flex-start;
+        padding: 15px 17px;
+    }
+
+    .od-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .od-main-column,
+    .od-sidebar {
+        gap: 18px;
+    }
+
+    .od-summary-card {
+        position: static;
+        padding: 22px;
+    }
+}
+
+@media (max-width: 520px) {
+    .orders-page,
+    .od-container {
+        width: calc(100% - 28px);
+    }
+
+    .orders-page {
+        padding: 40px 0 65px;
+    }
+
+    .orders-header h1,
+    .od-header h1 {
+        font-size: 27px;
+        letter-spacing: -.6px;
+    }
+
+    .orders-header p,
+    .od-header-copy > p {
+        font-size: 14px;
+    }
+
+    .continue-shopping,
+    .shop-now-btn {
+        padding: 12px 15px;
+        font-size: 13px;
+    }
+
+    .order-card,
+    .od-card {
+        padding: 17px;
+        border-radius: 12px;
+    }
+
+    .order-top {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .order-details {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 19px 13px;
+    }
+
+    .order-info > span:first-child {
+        font-size: 12px;
+    }
+
+    .order-info strong {
+        font-size: 14px;
+    }
+
+    .status-badge,
+    .od-badge {
+        padding: 6px 9px;
+        font-size: 11px;
+    }
+
+    .order-footer {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .od-section-heading {
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .od-section-heading h2,
+    .od-summary-card h2 {
+        font-size: 17px;
+    }
+
+    .od-status-content {
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .od-status-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .od-status-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .od-delivery-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .od-info-field--full {
+        grid-column: auto;
+    }
+
+    .od-item {
+        align-items: flex-start;
+        gap: 10px;
+        padding: 16px 0;
+    }
+
+    .od-item-visual {
+        width: 48px;
+        height: 54px;
+    }
+
+    .od-item-visual svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .od-item-info h3 {
+        font-size: 13px;
+    }
+
+    .od-item-total {
+        max-width: 100px;
+    }
+
+    .od-item-total strong {
+        font-size: 13px;
+    }
+
+    .od-summary-card {
+        padding: 18px;
+    }
+
+    .od-summary-total {
+        padding: 15px;
+    }
+
+    .od-summary-total > strong {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 360px) {
+    .order-details {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .order-footer {
+        flex-direction: column;
+    }
+
+    .od-item-visual {
+        width: 42px;
+        height: 49px;
+    }
+
+    .od-item-total {
+        max-width: 85px;
+    }
+}
+
+/* ---------------------------------------------------------
+   11. Accessibility
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .od-page *,
+    .od-page *::before,
+    .od-page *::after,
+    .orders-page *,
+    .orders-page *::before,
+    .orders-page *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+    }
+}

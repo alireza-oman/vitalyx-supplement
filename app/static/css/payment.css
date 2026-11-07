@@ -1,0 +1,421 @@
+/* =========================================
+   VITALYX - MODERN PAYMENT PAGE
+========================================= */
+
+.payment-page {
+    width: min(100% - 32px, 640px);
+    margin: 50px auto;
+    padding: 36px;
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid var(--border-color, #e7e3ed);
+    border-radius: 24px;
+    box-shadow: var(--card-shadow, 0 12px 40px rgba(0, 0, 0, 0.06));
+    color: var(--text-primary, #211b2b);
+}
+
+/* Header & Amount */
+.payment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-color, #e7e3ed);
+}
+
+.order-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    background: var(--bg-surface-elevated, #f3f0f8);
+    color: var(--text-secondary, #777180);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.payment-header h1 {
+    margin: 0 0 6px;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+}
+
+.subtitle {
+    margin: 0;
+    color: var(--text-secondary, #777180);
+    font-size: 13.5px;
+    line-height: 1.5;
+}
+
+.amount-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 12px 18px;
+    border-radius: 14px;
+    background: rgba(124, 77, 255, 0.08);
+    border: 1px solid rgba(124, 77, 255, 0.18);
+    white-space: nowrap;
+}
+
+.amount-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary, #777180);
+    margin-bottom: 4px;
+}
+
+.amount-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary, #7c4dff);
+}
+
+/* Step Headers */
+.card-step-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.step-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--primary, #7c4dff);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.card-step-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* Bank Transfer Card (Step 1) */
+.bank-transfer-card {
+    margin-top: 24px;
+    padding: 20px;
+    border-radius: 16px;
+    background: var(--bg-surface-elevated, #faf9fc);
+    border: 1px solid var(--border-color, #e7e3ed);
+}
+
+.bank-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.bank-detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.bank-detail-item.full-width {
+    grid-column: 1 / -1;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border-color, #e7e3ed);
+}
+
+.detail-label {
+    font-size: 12px;
+    color: var(--text-secondary, #777180);
+}
+
+.detail-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary, #211b2b);
+}
+
+.detail-value.mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+.copy-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 4px;
+    padding: 10px 14px;
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid var(--border-color, #e7e3ed);
+    border-radius: 10px;
+}
+
+.copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(124, 77, 255, 0.1);
+    color: var(--primary, #7c4dff);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    background: var(--primary, #7c4dff);
+    color: #ffffff;
+}
+
+.copy-btn.copied {
+    background: #10b981;
+    color: #ffffff;
+}
+
+/* Form (Step 2) */
+.payment-page form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin-top: 28px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary, #211b2b);
+}
+
+.form-input {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color, #e7e3ed);
+    border-radius: 12px;
+    outline: none;
+    background: var(--bg-surface-elevated, #faf9fc);
+    color: var(--text-primary, #211b2b);
+    font: inherit;
+    font-size: 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    border-color: var(--primary, #7c4dff);
+    box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.12);
+    background: var(--bg-surface, #ffffff);
+}
+
+.help-text {
+    margin: 0;
+    color: var(--text-secondary, #777180);
+    font-size: 12.5px;
+}
+
+.error-text {
+    margin: 0;
+    color: #ef4444;
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+/* Custom Drag & Drop Upload Zone */
+.upload-zone {
+    position: relative;
+    border: 2px dashed var(--border-color, #d8d2e2);
+    border-radius: 14px;
+    background: var(--bg-surface-elevated, #faf9fc);
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.upload-zone:hover,
+.upload-zone.dragover {
+    border-color: var(--primary, #7c4dff);
+    background: rgba(124, 77, 255, 0.04);
+}
+
+.upload-zone.has-file {
+    border-style: solid;
+    padding: 16px;
+}
+
+.file-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.upload-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(124, 77, 255, 0.1);
+    color: var(--primary, #7c4dff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+}
+
+.upload-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary, #211b2b);
+}
+
+.upload-hint {
+    margin: 0;
+    font-size: 12px;
+    color: var(--text-secondary, #777180);
+}
+
+/* Image Preview */
+.upload-preview {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+}
+
+.upload-preview img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--border-color, #e7e3ed);
+}
+
+.preview-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: hidden;
+}
+
+.file-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary, #211b2b);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.change-file-badge {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary, #7c4dff);
+}
+
+/* Submit Button */
+.submit-btn {
+    width: 100%;
+    min-height: 52px;
+    margin-top: 6px;
+    border: none;
+    border-radius: 12px;
+    background: var(--primary, #7c4dff);
+    color: #ffffff;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-btn:hover {
+    background: var(--primary-hover, #673ab7);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(124, 77, 255, 0.25);
+}
+
+.security-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 0;
+    color: var(--text-secondary, #777180);
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .payment-page {
+    background: var(--bg-surface, #17141e);
+    border-color: var(--border-color, #302a3b);
+    color: var(--text-primary, #f5f2fa);
+}
+
+[data-theme="dark"] .bank-transfer-card,
+[data-theme="dark"] .form-input,
+[data-theme="dark"] .upload-zone {
+    background: var(--bg-surface-elevated, #211d2a);
+    border-color: var(--border-color, #393245);
+    color: var(--text-primary, #f5f2fa);
+}
+
+[data-theme="dark"] .copy-wrapper {
+    background: var(--bg-surface, #17141e);
+    border-color: var(--border-color, #302a3b);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .payment-page {
+        width: calc(100% - 24px);
+        margin: 24px auto;
+        padding: 24px 18px;
+        border-radius: 18px;
+    }
+
+    .payment-header {
+        flex-direction: column;
+    }
+
+    .amount-box {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    .amount-label {
+        margin-bottom: 0;
+    }
+
+    .bank-details-grid {
+        grid-template-columns: 1fr;
+    }
+}
