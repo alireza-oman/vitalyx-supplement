@@ -3,7 +3,7 @@ import os
 
 class Config:
     # Security
-    SECRET_KEY = os.environ.get("SECRET_KEY", "very_secret_key")
+    SECRET_KEY = os.environ.get("SECRET_KEY")
 
     # Database
     SQLALCHEMY_DATABASE_URI = (
