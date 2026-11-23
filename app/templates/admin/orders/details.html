@@ -3,61 +3,47 @@
 {% block body %}
     {{ super() }}
 
-    <div class="panel panel-default" style="margin-top: 25px; background: var(--adm-surface); border-color: var(--adm-border);">
-        <div class="panel-heading" style="background: var(--adm-surface-alt); color: var(--adm-text); border-color: var(--adm-border);">
-            <strong>Order Actions &amp; Fulfillment</strong>
+    <div class="vx-panel vx-order-actions">
+        <div class="vx-panel-head">
+            <h3><i class='bx bx-cog'></i> Order Actions &amp; Fulfillment</h3>
         </div>
 
-        <div class="panel-body">
+        <div class="vx-panel-body">
 
             {% if model.status in ["pending_review", "pending"]
                 and model.payment_status != "paid" %}
 
-                <p style="margin-bottom: 18px;">
+                <p class="vx-order-hint">
                     Review this order and choose an action.
                 </p>
 
-                <!-- Approve -->
-                <form
-                    method="POST"
-                    action="{{ admin_view.get_url(
-                        '.approve_order',
-                        order_id=model.id
-                    ) }}"
-                    style="display: inline-block; margin-right: 8px;"
-                    onsubmit="return confirm('Are you sure you want to approve this order?');"
-                >
-                    <input
-                        type="hidden"
-                        name="csrf_token"
-                        value="{{ csrf_token() }}"
+                <div class="vx-action-group">
+                    <!-- Approve -->
+                    <form
+                        method="POST"
+                        action="{{ admin_view.get_url('.approve_order', order_id=model.id) }}"
+                        class="vx-inline-form"
+                        data-confirm="Are you sure you want to approve this order?"
                     >
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-success">
+                            Approve Order
+                        </button>
+                    </form>
 
-                    <button type="submit" class="btn btn-success">
-                        Approve Order
-                    </button>
-                </form>
-
-                <!-- Reject -->
-                <form
-                    method="POST"
-                    action="{{ admin_view.get_url(
-                        '.reject_order',
-                        order_id=model.id
-                    ) }}"
-                    style="display: inline-block;"
-                    onsubmit="return confirm('Are you sure you want to reject this order? Stock will be restored.');"
-                >
-                    <input
-                        type="hidden"
-                        name="csrf_token"
-                        value="{{ csrf_token() }}"
+                    <!-- Reject -->
+                    <form
+                        method="POST"
+                        action="{{ admin_view.get_url('.reject_order', order_id=model.id) }}"
+                        class="vx-inline-form"
+                        data-confirm="Are you sure you want to reject this order? Stock will be restored."
                     >
-
-                    <button type="submit" class="btn btn-danger">
-                        Reject Order
-                    </button>
-                </form>
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-danger">
+                            Reject Order
+                        </button>
+                    </form>
+                </div>
 
             {% elif model.status == "awaiting_payment"
                 and model.payment_status == "unpaid" %}
@@ -66,47 +52,33 @@
                     This order has been approved and is awaiting customer payment.
                 </div>
 
-                <!-- Revoke Approval -->
-                <form
-                    method="POST"
-                    action="{{ admin_view.get_url(
-                        '.revoke_approval',
-                        order_id=model.id
-                    ) }}"
-                    style="display: inline-block; margin-right: 8px;"
-                    onsubmit="return confirm('Revoke approval for this order?');"
-                >
-                    <input
-                        type="hidden"
-                        name="csrf_token"
-                        value="{{ csrf_token() }}"
+                <div class="vx-action-group">
+                    <!-- Revoke Approval -->
+                    <form
+                        method="POST"
+                        action="{{ admin_view.get_url('.revoke_approval', order_id=model.id) }}"
+                        class="vx-inline-form"
+                        data-confirm="Revoke approval for this order?"
                     >
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-warning">
+                            Revoke Approval
+                        </button>
+                    </form>
 
-                    <button type="submit" class="btn btn-warning">
-                        Revoke Approval
-                    </button>
-                </form>
-
-                <!-- Reject Approved Order -->
-                <form
-                    method="POST"
-                    action="{{ admin_view.get_url(
-                        '.reject_order',
-                        order_id=model.id
-                    ) }}"
-                    style="display: inline-block;"
-                    onsubmit="return confirm('Reject this approved order? Stock will be restored.');"
-                >
-                    <input
-                        type="hidden"
-                        name="csrf_token"
-                        value="{{ csrf_token() }}"
+                    <!-- Reject Approved Order -->
+                    <form
+                        method="POST"
+                        action="{{ admin_view.get_url('.reject_order', order_id=model.id) }}"
+                        class="vx-inline-form"
+                        data-confirm="Reject this approved order? Stock will be restored."
                     >
-
-                    <button type="submit" class="btn btn-danger">
-                        Reject Order
-                    </button>
-                </form>
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-danger">
+                            Reject Order
+                        </button>
+                    </form>
+                </div>
 
             {% elif model.status == "processing" and model.payment_status == "paid" %}
 
@@ -117,19 +89,11 @@
                 <!-- Mark as Shipped -->
                 <form
                     method="POST"
-                    action="{{ admin_view.get_url(
-                        '.ship_order',
-                        order_id=model.id
-                    ) }}"
-                    style="display: inline-block;"
-                    onsubmit="return confirm('Mark this order as shipped?');"
+                    action="{{ admin_view.get_url('.ship_order', order_id=model.id) }}"
+                    class="vx-inline-form"
+                    data-confirm="Mark this order as shipped?"
                 >
-                    <input
-                        type="hidden"
-                        name="csrf_token"
-                        value="{{ csrf_token() }}"
-                    >
-
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn btn-primary">
                         Mark as Shipped
                     </button>
@@ -144,19 +108,11 @@
                 <!-- Mark as Delivered -->
                 <form
                     method="POST"
-                    action="{{ admin_view.get_url(
-                        '.deliver_order',
-                        order_id=model.id
-                    ) }}"
-                    style="display: inline-block;"
-                    onsubmit="return confirm('Mark this order as delivered?');"
+                    action="{{ admin_view.get_url('.deliver_order', order_id=model.id) }}"
+                    class="vx-inline-form"
+                    data-confirm="Mark this order as delivered?"
                 >
-                    <input
-                        type="hidden"
-                        name="csrf_token"
-                        value="{{ csrf_token() }}"
-                    >
-
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn btn-success">
                         Mark as Delivered
                     </button>
