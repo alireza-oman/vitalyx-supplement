@@ -5,6 +5,7 @@
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-Web%20Framework-000000?logo=flask&logoColor=white)
 ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-ORM-D71F00?logo=sqlalchemy&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-SQLite-4169E1?logo=postgresql&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 A modular e-commerce web application built with **Python** and **Flask** for managing and selling health supplements. It supports user authentication, a database-backed shopping cart, checkout and order tracking, manual payment submission and verification, and a dedicated admin management panel.
@@ -21,7 +22,7 @@ A modular e-commerce web application built with **Python** and **Flask** for man
 - **Admin Panel:** Administrative interface built with `Flask-Admin` featuring a custom metrics dashboard and management views for orders, payments, products, categories, and users.
 - **Rate Limiting & Form Protection:** Request throttling via `Flask-Limiter` and CSRF protection via `Flask-WTF`.
 - **Custom Error Pages:** Styled error templates for HTTP `403`, `404`, and `502` responses.
-- **Database Migrations:** Version-controlled schema evolution managed via Alembic (`Flask-Migrate`).
+- **Database Support & Migrations:** Supports both **PostgreSQL** and **SQLite**, with automatic table initialization and version-controlled schema evolution via Alembic (`Flask-Migrate`).
 
 ---
 
@@ -35,7 +36,7 @@ A modular e-commerce web application built with **Python** and **Flask** for man
 ## Tech Stack
 
 - **Backend:** Python, Flask, Flask-Login, Flask-Admin, Flask-Limiter
-- **Database & ORM:** SQLAlchemy, Alembic (Flask-Migrate)
+- **Database & ORM:** PostgreSQL, SQLite, SQLAlchemy, Alembic (Flask-Migrate)
 - **Forms & Validation:** Flask-WTF, WTForms
 - **Frontend:** Jinja2 Templates, HTML5, CSS3, Vanilla JavaScript
 
@@ -69,6 +70,7 @@ vitalyx-supplement/
 
 - Python 3.10+ (recommended)
 - `pip` and `venv`
+- PostgreSQL (optional — defaults to SQLite if `DATABASE_URL` is not set)
 
 ### Installation
 
@@ -94,11 +96,17 @@ vitalyx-supplement/
    pip install -r requirements.txt
    ```
 
-4. **Configure environment variables:**
+4. **Configure environment variables (Optional for quick SQLite start):**
    Create a `.env` file in the project root:
    ```env
    SECRET_KEY=your-secret-key-here
+
+   # Default SQLite:
    DATABASE_URL=sqlite:///db.sqlite3
+
+   # Or PostgreSQL:
+   # DATABASE_URL=postgresql://postgres:password@localhost:5432/vitalyx_db
+
    APP_ENV=development
    ```
    > **Security Note:** Never commit your `.env` file or real credentials to Git.
@@ -142,6 +150,7 @@ vitalyx-supplement/
 ## Roadmap / Future Improvements
 
 - [x] Complete the admin dashboard view (`app/templates/admin/dashboard.html`)
+- [x] Add PostgreSQL database support alongside SQLite
 - [ ] Add automated unit and integration tests (`pytest`)
 - [ ] Add `.env.example` for easier onboarding
 - [ ] Implement a custom `500.html` error page
@@ -173,7 +182,7 @@ This project is licensed under the MIT License — see the `LICENSE` file for de
 - **پنل مدیریت اختصاصی:** داشبورد آماری و مدیریت سفارش‌ها، پرداخت‌ها، محصولات، دسته‌بندی‌ها و کاربران با `Flask-Admin`.
 - **امنیت و محدودیت درخواست:** محافظت در برابر CSRF با `Flask-WTF` و محدودسازی نرخ درخواست‌ها با `Flask-Limiter`.
 - **صفحات خطای اختصاصی:** قالب‌های طراحی‌شده برای خطاهای `403`، `404` و `502`.
-- **مدیریت تغییرات دیتابیس:** مایگریشن‌های نسخه‌بندی‌شده با `Alembic` (`Flask-Migrate`).
+- **پشتیبانی از دیتابیس و مایگریشن:** سازگار با **PostgreSQL** و **SQLite** همراه با ساخت خودکار جداول در اولین اجرا و مدیریت نسخه‌ها با `Alembic` (`Flask-Migrate`).
 
 ---
 
@@ -187,7 +196,7 @@ This project is licensed under the MIT License — see the `LICENSE` file for de
 ## تکنولوژی‌های استفاده‌شده
 
 - **بک‌اند:** Python, Flask, Flask-Login, Flask-Admin, Flask-Limiter
-- **دیتابیس و ORM:** SQLAlchemy, Alembic (Flask-Migrate)
+- **دیتابیس و ORM:** PostgreSQL, SQLite, SQLAlchemy, Alembic (Flask-Migrate)
 - **فرم‌ها و اعتبارسنجی:** Flask-WTF, WTForms
 - **فرانت‌اند:** Jinja2 Templates, HTML5, CSS3, Vanilla JavaScript
 
@@ -199,10 +208,11 @@ This project is licensed under the MIT License — see the `LICENSE` file for de
 
 - پایتون نسخه `3.10` یا بالاتر
 - `pip` و `venv`
+- دیتابیس PostgreSQL (اختیاری — در صورت نبود تنظیمات، برنامه به‌صورت پیش‌فرض از SQLite استفاده می‌کند)
 
 ### مراحل راه‌اندازی
 
-1. **کلون کردن پروژه:**
+**۱. کلون کردن پروژه:**
 
 <div dir="ltr">
 
@@ -213,7 +223,7 @@ cd vitalyx-supplement
 
 </div>
 
-2. **ساخت و فعال‌سازی محیط مجازی:**
+**۲. ساخت و فعال‌سازی محیط مجازی:**
 
 <div dir="ltr">
 
@@ -229,7 +239,7 @@ venv\Scripts\activate
 
 </div>
 
-3. **نصب وابستگی‌ها:**
+**۳. نصب وابستگی‌ها:**
 
 <div dir="ltr">
 
@@ -239,22 +249,28 @@ pip install -r requirements.txt
 
 </div>
 
-4. **تنظیم متغیرهای محیطی:**
-   یک فایل با نام `.env` در ریشه پروژه بسازید و مقادیر زیر را در آن قرار دهید:
+**۴. تنظیم متغیرهای محیطی (اختیاری برای اجرای سریع با SQLite):**
+یک فایل با نام `.env` در ریشه پروژه بسازید و مقادیر زیر را در آن قرار دهید:
 
 <div dir="ltr">
 
 ```env
 SECRET_KEY=your-secret-key-here
+
+# Default SQLite:
 DATABASE_URL=sqlite:///db.sqlite3
+
+# Or PostgreSQL:
+# DATABASE_URL=postgresql://postgres:password@localhost:5432/vitalyx_db
+
 APP_ENV=development
 ```
 
 </div>
 
-   > **نکته امنیتی:** هرگز فایل `.env` یا کلیدهای واقعی خود را روی گیت کامیت نکنید.
+> **نکته امنیتی:** هرگز فایل `.env` یا کلیدهای واقعی خود را روی گیت کامیت نکنید.
 
-5. **اجرای مایگریشن‌های دیتابیس:**
+**۵. اجرای مایگریشن‌های دیتابیس:**
 
 <div dir="ltr">
 
@@ -274,7 +290,7 @@ flask db upgrade
 
 </div>
 
-6. **اجرای برنامه:**
+**۶. اجرای برنامه:**
 
 <div dir="ltr">
 
@@ -284,13 +300,14 @@ python run.py
 
 </div>
 
-   برنامه روی آدرس `http://127.0.0.1:5000` در دسترس خواهد بود.
+برنامه روی آدرس `http://127.0.0.1:5000` در دسترس خواهد بود.
 
 ---
 
 ## نقشه راه و بهبودهای آینده
 
 - [x] تکمیل داشبورد پنل ادمین (`app/templates/admin/dashboard.html`)
+- [x] افزودن پشتیبانی از دیتابیس PostgreSQL در کنار SQLite
 - [ ] افزودن تست‌های خودکار با `pytest`
 - [ ] افزودن فایل `.env.example` برای راه‌اندازی سریع‌تر
 - [ ] طراحی صفحه خطای اختصاصی `500.html`
