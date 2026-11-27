@@ -71,6 +71,10 @@ def create_app():
     # Initialize Flask-Admin
     admin.init_app(app)
 
+    with app.app_context():
+        from app import models  # Ensure all models (User, Category, Product, ...) are imported
+        db.create_all()
+
     # Prevent duplicate admin views from being registered
     if len(admin._views) <= 1:
         admin.add_view(ProductAdminView(Product, db.session, name="Products"))
